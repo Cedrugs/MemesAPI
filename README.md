@@ -1,4 +1,4 @@
-# Foobar
+# MemesAPI
 
 MemesAPI is a open API to return a Memes from reddit in a dict object.
 
