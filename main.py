@@ -62,4 +62,4 @@ async def initialize():
     app.add_routes(routes)
     return app
 
-web.run_app(initialize(), host='dumboapi.herokuapp.com')
+web.run_app(initialize())
