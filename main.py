@@ -52,8 +52,9 @@ async def handle(request):
     async with ClientSession() as session:
         async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=100") as resp:
             data = await resp.json()
-        dadjoke_data = data['data']['children'][randint(0, 5)]['data']['selftext']
-    return web.Response(text=json.dumps({'jokes': f'{dadjoke_data}'}), status=200)
+        setup = data['data']['children'][randint(0, 99)]['data']['title']
+        punchline = data['data']['children'][randint(0, 99)]['data']['selftext']
+    return web.Response(text=json.dumps({'setup': f'{setup}', 'punchline': f'{punchline}'}), status=200)
 
 
 async def initialize():
