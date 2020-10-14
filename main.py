@@ -1,5 +1,5 @@
-from aiohttp import web, request
-from random import choice
+from aiohttp import web, request, ClientSession
+from random import choice, randint
 import json
 
 routes = web.RouteTableDef()
@@ -46,6 +46,15 @@ async def handle(request):
         error = {"error": f"{selected} sub is not available!", "status": 404}
         return web.Response(text=json.dumps(error), status=404)
     return web.Response(text=json.dumps(response), status=200)
+
+@routes.get('/dadjoke')
+async def handle(request):
+    async with ClientSession() as session:
+        async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=100") as resp:
+            data = await resp.json()
+        dadjoke_data = data['data']['children'][randint(0, 5)]['data']['selftext']
+    return web.Response(text=json.dumps({'jokes': f'{dadjoke_data}'}), status=200)
+
 
 async def initialize():
     app = web.Application()
