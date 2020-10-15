@@ -1,6 +1,7 @@
 from aiohttp import web, request, ClientSession
 from random import choice, randint
 import json
+import os
 
 routes = web.RouteTableDef()
 
@@ -62,4 +63,6 @@ async def initialize():
     app.add_routes(routes)
     return app
 
-web.run_app(initialize())
+
+port=int(os.environ.get("PORT", "8080"))
+web.run_app(initialize(), port=port)
