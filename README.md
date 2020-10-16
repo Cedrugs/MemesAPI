@@ -11,7 +11,7 @@ from aiohttp import ClientSession
 from asyncio import run
 from json import loads
 
-url = "http://localhost:8080/getmeme"
+url = "https://dumboapi.herokuapp.com/getmeme"
 
 async def getmeme():
     async with ClientSession() as session:
@@ -31,7 +31,7 @@ from aiohttp import ClientSession
 from asyncio import run
 from json import loads
 
-url = "http://localhost:8080/subreddit/aww"
+url = "https://dumboapi.herokuapp.com/subreddit/aww"
 
 async def getmeme():
     async with ClientSession() as session:
