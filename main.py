@@ -1,4 +1,4 @@
-from aiohttp import web, request, ClientSession
+from aiohttp import web, request as req, ClientSession
 from random import choice, randint
 import json
 import os
@@ -11,7 +11,7 @@ HEADERS = {
     'User-Agent' : "Dumbo"
 }
 async def getmeme():
-    async with request("GET", f"https://www.reddit.com/r/{choice(subreddit)}/new.json?limit=100", headers=HEADERS) as resp:
+    async with req("GET", f"https://www.reddit.com/r/{choice(subreddit)}/new.json?limit=100", headers=HEADERS) as resp:
         data = await resp.json()
         link_data = data['data']['children'][2]['data']['url_overridden_by_dest']
         title_data = data['data']['children'][2]['data']['title']
@@ -21,15 +21,14 @@ async def getmeme():
         return meme_data
 
 async def custom_subreddit(chosen_subreddit):
-    print(chosen_subreddit)
-    async with request("GET", f"https://www.reddit.com/r/{chosen_subreddit}/new.json?limit=100", headers=HEADERS) as resp:
+    async with req("GET", f"https://www.reddit.com/r/{chosen_subreddit}/new.json?limit=100", headers=HEADERS) as resp:
         data = await resp.json()
         try:
             subreddit_url = data['data']['children'][2]['data']['url_overridden_by_dest']
             subreddit_title = data['data']['children'][2]['data']['title']
-            subreddit_title = data['data']['children'][2]['data']['score']
+            subreddit_score = data['data']['children'][2]['data']['score']
             submission_name = data['data']['children'][2]['data']['subreddit_name_prefixed']
-            subreddit_data = {'image': f'{subreddit_url}', 'title': f'{subreddit_title}', 'score': f'{subreddit_title}', 'subreddit': f'{submission_name}'}
+            subreddit_data = {'image': f'{subreddit_url}', 'title': f'{subreddit_title}', 'score': f'{subreddit_score}', 'subreddit': f'{submission_name}'}
         except IndexError:
             subreddit_data = None
         return subreddit_data
@@ -42,20 +41,34 @@ async def handle(request):
 @routes.get('/subreddit/{subreddit}')
 async def handle(request):
     selected = request.match_info.get('subreddit', '')
-    response = await custom_subreddit(selected)
-    if response is None:
-        error = {"error": f"{selected} sub is not available!", "status": 404}
-        return web.Response(text=json.dumps(error), status=404)
-    return web.Response(text=json.dumps(response), status=200)
+    try:
+        response = await custom_subreddit(selected)
+        if response is None:
+            error = {"error": f"{selected} sub is not available!", "status": 404}
+            return web.Response(text=json.dumps(error), status=404)
+        return web.Response(text=json.dumps(response), status=200)
+    except KeyError:
+        key_error = {"error": f"There's a problem while trying to connect to {selected}. Pleasse try again later."}
+        return web.Response(text=json.dumps(key_error), status=403)
 
 @routes.get('/dadjoke')
 async def handle(request):
     async with ClientSession() as session:
-        async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=100") as resp:
+        async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=50") as resp:
             data = await resp.json()
-        setup = data['data']['children'][randint(0, 99)]['data']['title']
-        punchline = data['data']['children'][randint(0, 99)]['data']['selftext']
+        randomizer = randint(0, 49)
+        setup = data['data']['children'][randomizer]['data']['title']
+        punchline = data['data']['children'][randomizer]['data']['selftext']
     return web.Response(text=json.dumps({'setup': f'{setup}', 'punchline': f'{punchline}'}), status=200)
+
+@routes.get('/')
+async def handle(request):
+    return web.Response(text="""Welcome to Dumbo Memes API! 
+You can view a dadjokes, randomly generated meme, random subreddit memes!
+[GET] /dadjoke
+[GET] /subreddit/{subreddit}
+[GET] /getmeme
+    """)
 
 
 async def initialize():
