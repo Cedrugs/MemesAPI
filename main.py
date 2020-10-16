@@ -1,5 +1,6 @@
 from aiohttp import web, request as req, ClientSession
 from random import choice, randint
+from dadjokes import dadjoke
 import json
 import os
 
@@ -10,6 +11,13 @@ subreddit = ['memes', 'dankmemes', 'funny']
 HEADERS = {
     'User-Agent' : "Dumbo"
 }
+
+def list_or_reddit():
+    number = randint(0, 5)
+    if number >= 3:
+        return True
+    return False
+
 async def getmeme():
     async with req("GET", f"https://www.reddit.com/r/{choice(subreddit)}/new.json?limit=100", headers=HEADERS) as resp:
         data = await resp.json()
@@ -53,12 +61,17 @@ async def handle(request):
 
 @routes.get('/dadjoke')
 async def handle(request):
-    async with ClientSession() as session:
-        async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=50") as resp:
-            data = await resp.json()
-        randomizer = randint(0, 49)
-        setup = data['data']['children'][randomizer]['data']['title']
-        punchline = data['data']['children'][randomizer]['data']['selftext']
+    if list_or_reddit():
+        async with ClientSession() as session:
+            async with session.get("https://www.reddit.com/r/dadjokes/new.json?limit=50") as resp:
+                data = await resp.json()
+            randomizer = randint(0, 49)
+            setup = data['data']['children'][randomizer]['data']['title']
+            punchline = data['data']['children'][randomizer]['data']['selftext']
+    else:
+        randomizer = randint(0, 10)
+        setup = dadjoke[randomizer]['setup']
+        punchline = dadjoke[randomizer]['punchline']
     return web.Response(text=json.dumps({'setup': f'{setup}', 'punchline': f'{punchline}'}), status=200)
 
 @routes.get('/')
