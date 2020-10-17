@@ -23,9 +23,9 @@ async def getmeme():
         data = await resp.json()
         randomizer = randint(0, 49)
         link_data = data['data']['children'][randomizer]['data']['url_overridden_by_dest']
-        title_data = data['data']['children'][2][randomizer]['title']
-        score_data = data['data']['children'][2][randomizer]['score']
-        submission = data['data']['children'][2][randomizer]['subreddit_name_prefixed']
+        title_data = data['data']['children'][randomizer]['title']
+        score_data = data['data']['children'][randomizer]['score']
+        submission = data['data']['children'][randomizer]['subreddit_name_prefixed']
         meme_data = {'image': f'{link_data}', 'title': f'{title_data}', 'score': f'{score_data}', 'subreddit': f'{submission}'}
         return meme_data
 
