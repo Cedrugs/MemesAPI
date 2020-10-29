@@ -9,14 +9,13 @@ MemesAPI is a open API to return a Memes from reddit in a dict object.
 ```python
 from aiohttp import ClientSession
 from asyncio import run
-from json import loads
 
 url = "https://dumboapi.herokuapp.com/getmeme"
 
 async def getmeme():
     async with ClientSession() as session:
         async with session.get(url) as resp:
-            print(loads(await resp.read()))
+            print(resp.json())
 
 run(getmeme())
 ```
@@ -36,7 +35,7 @@ url = "https://dumboapi.herokuapp.com/subreddit/aww"
 async def getmeme():
     async with ClientSession() as session:
         async with session.get(url) as resp:
-            print(loads(await resp.read()))
+            print(resp.json())
 
 run(getmeme())
 ```
