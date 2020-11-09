@@ -15,7 +15,8 @@ url = "https://dumboapi.herokuapp.com/getmeme"
 async def getmeme():
     async with ClientSession() as session:
         async with session.get(url) as resp:
-            print(resp.json())
+            data = await resp.json()
+    print(print)
 
 run(getmeme())
 ```
