@@ -21,21 +21,19 @@ run(getmeme())
 ```
 `GET` Method to get the post
 
-`subreddit` Change aww into a custom subreddit
-
 ## Requesting a post from subreddit
-
+`subreddit` you can change the subreddit to custom subreddit.
 ```python
 from aiohttp import ClientSession
 from asyncio import run
-from json import loads
 
 url = "https://dumboapi.herokuapp.com/subreddit/aww"
 
 async def getmeme():
     async with ClientSession() as session:
         async with session.get(url) as resp:
-            print(resp.json())
+            data = await resp.json()
+    print(data)
 
 run(getmeme())
 ```
