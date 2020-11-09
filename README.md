@@ -14,7 +14,7 @@ from asyncio import run
 url = "https://dumboapi.herokuapp.com/getmeme"
 
 async def getmeme():
-    async request("GET", url) as resp:
+    async with request("GET", url) as resp:
        data = await resp.json()
     print(print)
 
@@ -31,7 +31,7 @@ from asyncio import run
 url = "https://dumboapi.herokuapp.com/subreddit/aww"
 
 async def getsubreddit():
-    async request("GET", url) as resp:
+    async with request("GET", url) as resp:
        data = await resp.json()
     print(print)
 run(getmeme())
