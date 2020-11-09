@@ -8,15 +8,14 @@ MemesAPI is a asynchronous python API to return a Memes from reddit returning a 
 `GET` Method to get the memes
 
 ```python
-from aiohttp import ClientSession
+from aiohttp import request
 from asyncio import run
 
 url = "https://dumboapi.herokuapp.com/getmeme"
 
 async def getmeme():
-    async with ClientSession() as session:
-        async with session.get(url) as resp:
-            data = await resp.json()
+    async request("GET", url) as resp:
+       data = await resp.json()
     print(print)
 
 run(getmeme())
@@ -24,19 +23,17 @@ run(getmeme())
 `GET` Method to get the post
 
 ## Requesting a post from subreddit
-`subreddit` you can change the subreddit to custom subreddit.
+`subreddit` you can change the subreddit (aww) to custom subreddit such as DankMemes and etc.
 ```python
 from aiohttp import ClientSession
 from asyncio import run
 
 url = "https://dumboapi.herokuapp.com/subreddit/aww"
 
-async def getmeme():
-    async with ClientSession() as session:
-        async with session.get(url) as resp:
-            data = await resp.json()
-    print(data)
-
+async def getsubreddit():
+    async request("GET", url) as resp:
+       data = await resp.json()
+    print(print)
 run(getmeme())
 ```
 
