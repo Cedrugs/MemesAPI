@@ -1,6 +1,7 @@
 # MemesAPI
 
-MemesAPI is a open API to return a Memes from reddit in a dict object.
+MemesAPI is a asynchronous python API to return a Memes from reddit returning a dictionary of url, author, upvote, and comments
+
 
 ## Requesting randomly generated memes
 
