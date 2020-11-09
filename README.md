@@ -43,4 +43,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
+Created by the author of Dumbo discord bot (Cedrugs) or known as Cedric#4630 on discord.
 [MIT](https://choosealicense.com/licenses/mit/)
