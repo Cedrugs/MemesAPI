@@ -22,7 +22,7 @@ run(getmeme())
 ```
 
 ## Requesting a post from subreddit
-`GET` Method to get the post
+`GET` Method to get the post\n
 `subreddit` you can change the subreddit (aww) to custom subreddit such as DankMemes and etc.
 ```python
 from aiohttp import ClientSession
