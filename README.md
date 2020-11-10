@@ -26,7 +26,7 @@ run(getmeme())
 
 `subreddit` you can change the subreddit (aww) to custom subreddit such as DankMemes and etc.
 ```python
-from aiohttp import ClientSession
+from aiohttp import request
 from asyncio import run
 
 url = "https://dumboapi.herokuapp.com/subreddit/aww"
@@ -36,6 +36,21 @@ async def getsubreddit():
        data = await resp.json()
     print(print)
 run(getmeme())
+```
+## Requesting a dad joke
+`GET` Method to get the joke
+```python
+from aiohttp import request
+from asyncio import run
+
+url = "https://dumboapi.herokuapp.com/dadjoke"
+
+async def get_dadjoke():
+   async with request("GET", url) as resp:
+      data = await resp.json()
+   print(data)
+
+run(get_dadjoke())
 ```
 
 ## Contributing
