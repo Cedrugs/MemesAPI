@@ -1,16 +1,12 @@
 from aiohttp import web, request as req, ClientSession
 from random import choice, randint
 from dadjokes import dadjoke
-import json
 import os
 
 routes = web.RouteTableDef()
 
 subreddit = ['memes', 'dankmemes', 'funny']
-
-HEADERS = {
-    'User-Agent': "Dumbo"
-}
+updates = ['hot', 'new']
 
 
 def list_or_reddit():
@@ -21,7 +17,7 @@ def list_or_reddit():
 
 
 async def getmeme():
-    async with req("GET", f"https://www.reddit.com/r/{choice(subreddit)}/new.json?limit=50", headers=HEADERS) as resp:
+    async with req("GET", f"https://www.reddit.com/r/{choice(subreddit)}/{choice(updates)}.json?limit=50") as resp:
         data = await resp.json()
         memes = [x for x in data['data']['children'] if x['data']['is_video'] is not True]
         randomizer = randint(0, 20)
@@ -99,6 +95,7 @@ async def handle(request):
 
 
 @routes.get('/')
+@routes.get('/home')
 async def handle(request):
     return web.Response(text="""Welcome to Dumbo Memes API! 
 You can view a dadjokes, randomly generated meme, random subreddit memes!
